@@ -3,166 +3,252 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>WikiTok – Swipe &amp; Learn</title>
-<meta name="description" content="Turn scrolling into learning. Short Wikipedia articles with beautiful images, a feed that learns what you love, in 12 languages.">
-<meta property="og:title" content="WikiTok – Swipe & Learn">
-<meta property="og:description" content="Turn scrolling into learning.">
-<meta name="theme-color" content="#0E0F12">
+<title>WikiTok — Wikipedia, one swipe at a time</title>
+<meta name="description" content="Short Wikipedia articles with real images, in a feed that learns what you're curious about. Free on iPhone, in 12 languages.">
+<meta name="theme-color" content="#0B0B0C">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
-  :root{--bg:#0E0F12;--surface:#17181C;--border:rgba(255,255,255,.1);--text:#EDEDED;--muted:rgba(255,255,255,.6)}
-  *{box-sizing:border-box}
-  html,body{margin:0;background:var(--bg);color:var(--text);
-    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
-  a{color:inherit;text-decoration:none}
-  .glow{position:fixed;width:620px;height:620px;border-radius:50%;filter:blur(40px);opacity:.45;pointer-events:none;z-index:0}
-  .g1{top:-220px;left:-180px;background:radial-gradient(circle,#3D6BFF 0,transparent 65%)}
-  .g2{top:120px;right:-260px;background:radial-gradient(circle,#B0306A 0,transparent 65%)}
-  .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 24px}
-  nav{display:flex;align-items:center;justify-content:space-between;padding:28px 0}
-  .logo{font-weight:800;font-size:22px;letter-spacing:-.3px}
-  .logo span{opacity:.55}
-  .navlink{font-size:14px;color:var(--muted)}
-  .navlink:hover{color:#fff}
-
-  .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding:48px 0 96px}
-  .badge{display:inline-block;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:1.2px;
-    background:linear-gradient(90deg,#8A4DFF,#FF3D7F)}
-  h1{font-size:clamp(40px,6vw,68px);line-height:1.02;letter-spacing:-2px;margin:20px 0 18px;font-weight:800}
-  .lead{font-size:19px;line-height:1.55;color:var(--muted);max-width:520px;margin:0 0 32px}
-  .cta{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#000;font-weight:700;font-size:16px;
-    padding:16px 26px;border-radius:30px;transition:transform .15s}
-  .cta:hover{transform:translateY(-2px)}
-  .cta small{display:block;font-size:11px;font-weight:600;opacity:.6;line-height:1}
-  .meta{margin-top:18px;font-size:13px;color:var(--muted)}
-
-  /* Telefon maketi */
-  .phone{justify-self:center;width:300px;height:620px;border-radius:48px;padding:12px;background:#000;
-    border:1px solid var(--border);box-shadow:0 40px 120px rgba(0,0,0,.6),0 0 0 8px #15161a}
-  .screen{position:relative;width:100%;height:100%;border-radius:38px;overflow:hidden;
-    background:radial-gradient(120% 70% at 30% 20%,#2c5aa8 0,#162a52 40%,#0b1020 75%)}
-  .screen .stars{position:absolute;inset:0;background-image:
-    radial-gradient(2px 2px at 40px 90px,#fff8,transparent),radial-gradient(1.5px 1.5px at 200px 60px,#fff9,transparent),
-    radial-gradient(1px 1px at 120px 180px,#fff8,transparent),radial-gradient(2px 2px at 230px 220px,#fff6,transparent),
-    radial-gradient(1px 1px at 70px 260px,#fff7,transparent)}
-  .orb{position:absolute;top:150px;left:50%;width:150px;height:150px;margin-left:-75px;border-radius:50%;
-    background:radial-gradient(circle at 50% 50%,#000 0 38%,#ffb35c 44%,#ff6a3d 52%,transparent 66%);filter:blur(.5px)}
-  .shade{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.55) 0,transparent 22%,transparent 45%,rgba(0,0,0,.9) 100%)}
-  .top{position:absolute;top:18px;left:14px;right:14px}
-  .bar{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:14px}
-  .dot{width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.15)}
-  .chips{display:flex;gap:6px;margin-top:12px}
-  .chip{font-size:10px;padding:5px 9px;border-radius:12px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.15)}
-  .chip.on{background:#fff;color:#000;font-weight:700}
-  .card{position:absolute;left:16px;right:60px;bottom:28px}
-  .pill{display:inline-flex;align-items:center;gap:6px;font-size:9px;font-weight:700;letter-spacing:1px;padding:4px 8px;
-    border-radius:10px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.15)}
-  .pill i{width:6px;height:6px;border-radius:50%;background:#5c6bc0}
-  .card h3{font-size:24px;margin:10px 0 6px;letter-spacing:-.5px}
-  .card p{font-size:11px;line-height:1.5;color:rgba(255,255,255,.8);margin:0 0 10px}
-  .hint{font-size:10px;font-weight:600;color:rgba(255,255,255,.6)}
-  .side{position:absolute;right:12px;bottom:34px;display:flex;flex-direction:column;gap:10px}
-  .side span{width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.15);
-    display:flex;align-items:center;justify-content:center;font-size:15px}
-
-  section{padding:40px 0 80px}
-  h2{font-size:clamp(30px,4vw,44px);letter-spacing:-1px;margin:0 0 12px;text-align:center}
-  .sub{text-align:center;color:var(--muted);font-size:17px;margin:0 auto 44px;max-width:560px;line-height:1.5}
-  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-  .feat{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:24px}
-  .ico{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
-  .feat h4{margin:0 0 8px;font-size:17px}
-  .feat p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}
-
-  .facts{display:flex;flex-direction:column;gap:10px;max-width:460px;margin:0 auto}
-  .bubble{align-self:flex-start;background:var(--surface);border:1px solid var(--border);border-radius:18px 18px 18px 4px;
-    padding:12px 16px;font-size:15px}
-  .bubble.me{align-self:flex-end;background:#fff;color:#000;font-weight:700;border-radius:18px 18px 4px 18px}
-
-  .final{text-align:center;background:linear-gradient(135deg,#2a1c5c,#5a1d3b);border:1px solid var(--border);
-    border-radius:32px;padding:56px 24px;margin-bottom:60px}
-  .final h2{margin-bottom:10px}
-  footer{border-top:1px solid var(--border);padding:28px 0 40px;display:flex;justify-content:space-between;
-    flex-wrap:wrap;gap:12px;color:var(--muted);font-size:13px}
-  footer a:hover{color:#fff}
-
-  @media (max-width:860px){
-    .hero{grid-template-columns:1fr;text-align:center;padding-top:16px}
-    .lead{margin-left:auto;margin-right:auto}
-    .grid{grid-template-columns:1fr 1fr}
+  :root{
+    --bg:#0B0B0C; --ink:#F2EFEA; --muted:#8C8982; --rule:#242426;
+    --serif:"Instrument Serif",Georgia,serif;
+    --sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   }
-  @media (max-width:520px){ .grid{grid-template-columns:1fr} .phone{transform:scale(.92)} }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  a{color:inherit}
+  .wrap{max-width:1160px;margin:0 auto;padding:0 28px}
+
+  header{display:flex;justify-content:space-between;align-items:baseline;padding:28px 0;border-bottom:1px solid var(--rule)}
+  .mark{font-family:var(--serif);font-size:28px;letter-spacing:-.3px;text-decoration:none}
+  .mark i{color:var(--muted)}
+  .top-link{font-size:14px;color:var(--muted);text-decoration:none}
+  .top-link:hover{color:var(--ink)}
+
+  /* Hero */
+  .hero{display:grid;grid-template-columns:1fr 360px;gap:72px;align-items:center;padding:72px 0 96px}
+  .kicker{font-size:13px;color:var(--muted);letter-spacing:.02em;margin:0 0 28px}
+  h1{font-family:var(--serif);font-weight:400;font-size:clamp(52px,7.4vw,96px);line-height:.95;letter-spacing:-.02em;margin:0 0 28px}
+  h1 em{color:var(--muted)}
+  .lead{font-size:18px;line-height:1.6;color:#C9C6BF;max-width:470px;margin:0 0 36px}
+  .btn{display:inline-block;background:var(--ink);color:#0B0B0C;text-decoration:none;font-weight:600;font-size:15px;
+       padding:15px 22px;border-radius:4px}
+  .btn:hover{background:#fff}
+  .fine{margin-top:18px;font-size:13px;color:var(--muted)}
+
+  /* Phone */
+  .device{justify-self:end}
+  .phone{position:relative;width:320px;height:660px;border-radius:52px;background:#000;padding:11px;
+         box-shadow:0 0 0 1px #2a2a2c,0 30px 80px rgba(0,0,0,.55)}
+  .screen{position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;background:#111}
+  .track{position:absolute;inset:0;transition:transform .75s cubic-bezier(.2,.8,.2,1)}
+  .slide{position:relative;width:100%;height:100%;overflow:hidden}
+  .slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .slide::after{content:"";position:absolute;inset:0;
+    background:linear-gradient(to bottom,rgba(0,0,0,.6) 0%,rgba(0,0,0,0) 26%,rgba(0,0,0,0) 42%,rgba(0,0,0,.65) 66%,rgba(0,0,0,.92) 100%)}
+  .copy{position:absolute;left:18px;right:64px;bottom:30px;z-index:2}
+  .tag{display:inline-flex;align-items:center;gap:6px;font-size:9.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;
+       padding:4px 9px;border-radius:12px;background:rgba(0,0,0,.35);border:1px solid rgba(255,255,255,.16)}
+  .tag b{width:6px;height:6px;border-radius:50%}
+  .copy h3{font-family:var(--sans);font-weight:700;font-size:25px;line-height:1.1;letter-spacing:-.02em;margin:10px 0 7px}
+  .copy p{font-size:11.5px;line-height:1.5;color:rgba(255,255,255,.84);margin:0 0 10px;
+          display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
+  .copy span{font-size:10.5px;font-weight:600;color:rgba(255,255,255,.6)}
+  .chrome{position:absolute;inset:0;z-index:3;pointer-events:none}
+  .bar{position:absolute;top:16px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:center;
+       font-weight:700;font-size:14px}
+  .bar i{font-style:normal;opacity:.55}
+  .circ{width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.16)}
+  .chips{position:absolute;top:54px;left:14px;display:flex;gap:6px}
+  .chips span{font-size:10px;padding:5px 9px;border-radius:12px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.16)}
+  .chips span:first-child{background:#fff;color:#000;font-weight:600}
+  .side{position:absolute;right:12px;bottom:36px;display:flex;flex-direction:column;gap:11px}
+  .side span{width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.16);
+             display:grid;place-items:center}
+  .side svg{width:17px;height:17px;stroke:#fff;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  /* Parmak izi: her geçişten önce yukarı doğru kayar */
+  .touch{position:absolute;left:50%;top:62%;width:34px;height:34px;margin-left:-17px;border-radius:50%;
+         background:rgba(255,255,255,.22);border:1px solid rgba(255,255,255,.5);opacity:0}
+  .touch.go{animation:swipe .7s cubic-bezier(.3,.7,.3,1)}
+  @keyframes swipe{0%{opacity:0;transform:translateY(0) scale(.85)}20%{opacity:1}100%{opacity:0;transform:translateY(-170px) scale(1)}}
+
+  .caption{display:flex;justify-content:space-between;margin-top:18px;font-size:13px;color:var(--muted);width:320px}
+  .caption b{color:var(--ink);font-weight:500}
+
+  /* Sections */
+  section{border-top:1px solid var(--rule);padding:72px 0}
+  .label{font-size:13px;color:var(--muted);margin:0 0 40px}
+  h2{font-family:var(--serif);font-weight:400;font-size:clamp(38px,4.6vw,58px);line-height:1;letter-spacing:-.015em;margin:0 0 48px;max-width:760px}
+  h2 em{color:var(--muted)}
+
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:40px}
+  .step{border-top:1px solid var(--ink);padding-top:18px}
+  .step .n{font-size:13px;color:var(--muted)}
+  .step h4{font-size:19px;font-weight:600;margin:28px 0 10px;letter-spacing:-.01em}
+  .step p{margin:0;color:#B7B4AD;line-height:1.6;font-size:15px}
+  .step svg{width:30px;height:30px;stroke:var(--ink);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;margin-top:28px}
+
+  .facts{list-style:none;margin:0;padding:0}
+  .facts li{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:baseline;padding:22px 0;border-bottom:1px solid var(--rule)}
+  .facts li:first-child{border-top:1px solid var(--rule)}
+  .facts q{font-family:var(--serif);font-size:clamp(24px,2.6vw,34px);line-height:1.15;quotes:none}
+  .facts small{font-size:13px;color:var(--muted);white-space:nowrap}
+
+  .langs{display:flex;flex-wrap:wrap;gap:6px 28px;font-family:var(--serif);font-size:clamp(28px,3.4vw,44px);line-height:1.2}
+  .langs span{color:#5d5b56;transition:color .2s}
+  .langs span:hover{color:var(--ink)}
+
+  .end{display:flex;justify-content:space-between;align-items:end;gap:32px;flex-wrap:wrap}
+  .end h2{margin:0}
+
+  footer{border-top:1px solid var(--rule);padding:28px 0 48px;display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;
+         font-size:12.5px;color:var(--muted);line-height:1.6}
+  footer a{color:var(--muted)}
+  footer a:hover{color:var(--ink)}
+
+  @media (max-width:900px){
+    .hero{grid-template-columns:1fr;gap:56px;padding-top:48px}
+    .device{justify-self:center}
+    .steps{grid-template-columns:1fr;gap:36px}
+  }
+  @media (max-width:420px){ .phone{width:290px;height:600px} .caption{width:290px} }
+  @media (prefers-reduced-motion:reduce){ .track{transition:none} .touch{display:none} }
 </style>
 </head>
 <body>
-<div class="glow g1"></div><div class="glow g2"></div>
 <div class="wrap">
-  <nav>
-    <div class="logo">Wiki<span>Tok</span></div>
-    <a class="navlink" href="https://toolstoore.blogspot.com/2025/03/wikitok-privacy-policy.html">Privacy</a>
-  </nav>
+  <header>
+    <a class="mark" href="/">Wiki<i>Tok</i></a>
+    <a class="top-link" href="https://apps.apple.com/us/app/wikitok-swipe-learn/id6742821727">App Store ↗</a>
+  </header>
 
   <div class="hero">
     <div>
-      <span class="badge">SWIPE &amp; LEARN</span>
-      <h1>Turn scrolling into learning.</h1>
-      <p class="lead">Short Wikipedia articles with beautiful images. A feed that learns what you love — science, history, art, music and more, in 12 languages.</p>
-      <a class="cta" href="https://apps.apple.com/us/app/wikitok-swipe-learn/id6742821727">
-        <span><small>Download on the</small>App Store</span>
-      </a>
-      <div class="meta">Free · iPhone &amp; iPad</div>
+      <p class="kicker">For iPhone · Free</p>
+      <h1>Wikipedia,<br><em>one swipe</em><br>at a time.</h1>
+      <p class="lead">Short articles with real images, in a feed that learns what you're curious about. Swipe up for the next one, swipe left to read the whole thing.</p>
+      <a class="btn" href="https://apps.apple.com/us/app/wikitok-swipe-learn/id6742821727">Download on the App Store</a>
+      <p class="fine">12 languages · Content from Wikipedia</p>
     </div>
 
-    <div class="phone" aria-hidden="true">
-      <div class="screen">
-        <div class="stars"></div><div class="orb"></div><div class="shade"></div>
-        <div class="top">
-          <div class="bar"><span class="dot"></span><span>Wiki<span style="opacity:.55">Tok</span></span><span class="dot"></span></div>
-          <div class="chips"><span class="chip on">All</span><span class="chip">Science</span><span class="chip">History</span><span class="chip">Art</span></div>
+    <div class="device">
+      <div class="phone" aria-label="WikiTok app preview">
+        <div class="screen">
+          <div class="track" id="track"></div>
+          <div class="chrome">
+            <div class="bar"><span class="circ"></span><span>Wiki<i>Tok</i></span><span class="circ"></span></div>
+            <div class="chips"><span>All</span><span>Science</span><span>History</span><span>Art</span></div>
+            <div class="side">
+              <span><svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg></span>
+              <span><svg viewBox="0 0 24 24"><path d="M12 15V3M7 8l5-5 5 5M5 13v6h14v-6"/></svg></span>
+              <span><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3a14 14 0 0 1 0 18M12 3a14 14 0 0 0 0 18"/></svg></span>
+            </div>
+            <div class="touch" id="touch"></div>
+          </div>
         </div>
-        <div class="card">
-          <span class="pill"><i></i>ASTRONOMY</span>
-          <h3>Black hole</h3>
-          <p>A region of spacetime where gravity is so strong that nothing, not even light, can escape it…</p>
-          <span class="hint">Tap to read ›</span>
-        </div>
-        <div class="side"><span>♡</span><span>↗</span><span>◎</span></div>
       </div>
+      <div class="caption"><span>Now reading <b id="now">Black hole</b></span><span id="count">01 / 06</span></div>
     </div>
   </div>
 
   <section>
-    <h2>Five minutes a day. Endless curiosity.</h2>
-    <p class="sub">Same habit, better result: every swipe teaches you something real.</p>
-    <div class="grid">
-      <div class="feat"><div class="ico" style="background:#3D6BFF29">⚡️</div><h4>Learn while you scroll</h4><p>Bite-sized articles, one swipe at a time. Swipe left to read the whole story.</p></div>
-      <div class="feat"><div class="ico" style="background:#16C79A29">✨</div><h4>A feed that learns you</h4><p>The more you read, the better your feed fits what you love.</p></div>
-      <div class="feat"><div class="ico" style="background:#FFB54729">🧠</div><h4>Daily quiz</h4><p>Test yourself on what you read today and remember it longer.</p></div>
-      <div class="feat"><div class="ico" style="background:#FF4D6729">🌍</div><h4>12 languages</h4><p>English, Türkçe, Deutsch, Español, Français, 日本語 and more.</p></div>
+    <p class="label">How it works</p>
+    <h2>Three gestures. <em>That's the whole manual.</em></h2>
+    <div class="steps">
+      <div class="step"><span class="n">01</span>
+        <svg viewBox="0 0 32 32"><path d="M16 26V6M9 13l7-7 7 7"/></svg>
+        <h4>Swipe up</h4><p>A new article, chosen from the topics you picked — and the ones you keep reading.</p></div>
+      <div class="step"><span class="n">02</span>
+        <svg viewBox="0 0 32 32"><path d="M26 16H6M13 9l-7 7 7 7"/></svg>
+        <h4>Swipe left</h4><p>Open the full article, with its sections, in a clean reader. Works offline for saved ones.</p></div>
+      <div class="step"><span class="n">03</span>
+        <svg viewBox="0 0 32 32"><path d="M16 27s-10-6.2-10-14a5.5 5.5 0 0 1 10-3.2A5.5 5.5 0 0 1 26 13c0 7.8-10 14-10 14z"/></svg>
+        <h4>Double-tap</h4><p>Save it. At the end of the day, a short quiz helps the good stuff stick.</p></div>
     </div>
   </section>
 
   <section>
-    <h2>Always have something interesting to say.</h2>
-    <p class="sub">Surprising facts from history, science and art.</p>
-    <div class="facts">
-      <div class="bubble">Octopuses have three hearts 🐙</div>
-      <div class="bubble">A day on Venus is longer than its year 🪐</div>
-      <div class="bubble">Honey found in Egyptian tombs was still edible 🍯</div>
-      <div class="bubble me">Wait, really?! 🤯</div>
+    <p class="label">From this week's feed</p>
+    <ul class="facts">
+      <li><q>An octopus has three hearts.</q><small>Octopus</small></li>
+      <li><q>A day on Venus lasts longer than its year.</q><small>Venus</small></li>
+      <li><q>The blue whale is the largest animal known to have ever existed.</q><small>Blue whale</small></li>
+      <li><q>Van Gogh painted The Starry Night from his room at an asylum.</q><small>The Starry Night</small></li>
+    </ul>
+  </section>
+
+  <section>
+    <p class="label">Read in your language</p>
+    <div class="langs">
+      <span>English</span><span>Türkçe</span><span>Deutsch</span><span>Español</span><span>Français</span><span>Italiano</span>
+      <span>Português</span><span>Русский</span><span>العربية</span><span>हिंदी</span><span>中文</span><span>日本語</span>
     </div>
   </section>
 
-  <div class="final">
-    <h2>Start swiping smarter.</h2>
-    <p class="sub" style="margin-bottom:28px">Free to download. Content from Wikipedia, the free encyclopedia.</p>
-    <a class="cta" href="https://apps.apple.com/us/app/wikitok-swipe-learn/id6742821727"><span><small>Download on the</small>App Store</span></a>
-  </div>
+  <section class="end">
+    <h2>Make your scrolling<br><em>count for something.</em></h2>
+    <a class="btn" href="https://apps.apple.com/us/app/wikitok-swipe-learn/id6742821727">Download on the App Store</a>
+  </section>
 
   <footer>
-    <span>© 2026 WikiTok · Articles from Wikipedia under CC BY-SA</span>
-    <span><a href="https://toolstoore.blogspot.com/2025/03/wikitok-privacy-policy.html">Privacy Policy</a> ·
+    <span>WikiTok is an independent app and is not affiliated with the Wikimedia Foundation.<br>
+      Article text from Wikipedia (CC BY-SA). Images from Wikimedia Commons.</span>
+    <span><a href="https://toolstoore.blogspot.com/2025/03/wikitok-privacy-policy.html">Privacy Policy</a> &nbsp;·&nbsp;
       <a href="https://apps.apple.com/us/app/wikitok-swipe-learn/id6742821727">App Store</a></span>
   </footer>
 </div>
+
+<script>
+  // Telefon ekranında uygulamadaki gibi otomatik kaydırma
+  const T = 'https://thumb.wikimedia.org/wikipedia/commons/thumb/';
+  const slides = [
+    {t:'Black hole', c:'Astronomy', col:'#5C6BC0', img:T+'4/4f/Black_hole_-_Messier_87_crop_max_res.jpg/960px-Black_hole_-_Messier_87_crop_max_res.jpg',
+     s:'A black hole is an astronomical body so compact that its gravity prevents anything, including light, from escaping.'},
+    {t:'The Starry Night', c:'Art', col:'#AB47BC', img:T+'e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/960px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg',
+     s:'An oil-on-canvas painting by Vincent van Gogh, painted in June 1889 from the window of his asylum room at Saint-Rémy-de-Provence.'},
+    {t:'Octopus', c:'Biology', col:'#8BC34A', img:T+'5/57/Octopus2.jpg/960px-Octopus2.jpg',
+     s:'A soft-bodied, eight-limbed mollusc. The order consists of some 300 species, grouped with squids, cuttlefish and nautiloids.'},
+    {t:'Great Pyramid of Giza', c:'History', col:'#FFC107', img:T+'e/e7/Great_Pyramid_of_Giza_-_Pyramid_of_Khufu.jpg/960px-Great_Pyramid_of_Giza_-_Pyramid_of_Khufu.jpg',
+     s:'The oldest of the Seven Wonders of the Ancient World, and the only one that has remained largely intact.'},
+    {t:'Aurora', c:'Science', col:'#4CAF50', img:T+'d/d3/Aurora_borealis_over_Eielson_Air_Force_Base%2C_Alaska.jpg/960px-Aurora_borealis_over_Eielson_Air_Force_Base%2C_Alaska.jpg',
+     s:"A natural light display in Earth's upper atmosphere, caused by charged particles from the Sun colliding with atoms."},
+    {t:'Mount Everest', c:'Geography', col:'#009688', img:T+'1/15/Mt._Everest_from_Gokyo_Ri_November_5%2C_2012.jpg/960px-Mt._Everest_from_Gokyo_Ri_November_5%2C_2012.jpg',
+     s:'The highest mountain on Earth above sea level, on the China–Nepal border in the Himalayas.'},
+  ];
+  const track = document.getElementById('track');
+  const make = d => '<div class="slide"><img src="' + d.img + '" alt="" loading="eager">' +
+    '<div class="copy"><span class="tag"><b style="background:' + d.col + '"></b>' + d.c + '</span>' +
+    '<h3>' + d.t + '</h3><p>' + d.s + '</p><span>Tap to read ›</span></div></div>';
+  track.innerHTML = slides.map(make).join('') + make(slides[0]); // sona ilk slaytın kopyası
+
+  const now = document.getElementById('now'), count = document.getElementById('count'), touch = document.getElementById('touch');
+  let i = 0, paused = false;
+  const pad = n => String(n).padStart(2,'0');
+  function show(){
+    const k = i % slides.length;
+    now.textContent = slides[k].t;
+    count.textContent = pad(k+1) + ' / ' + pad(slides.length);
+  }
+  function next(){
+    if (paused || document.hidden) return;
+    touch.classList.remove('go'); void touch.offsetWidth; touch.classList.add('go');
+    setTimeout(() => {
+      i++;
+      track.style.transform = 'translateY(-' + (i*100) + '%)';
+      show();
+      if (i === slides.length) {           // kopyaya gelindi: fark ettirmeden başa sar
+        setTimeout(() => {
+          track.style.transition = 'none'; i = 0; track.style.transform = 'translateY(0)';
+          void track.offsetWidth; track.style.transition = '';
+        }, 800);
+      }
+    }, 180);
+  }
+  const phone = document.querySelector('.phone');
+  phone.addEventListener('mouseenter', () => paused = true);
+  phone.addEventListener('mouseleave', () => paused = false);
+  setInterval(next, 3400);
+</script>
 </body>
 </html>
