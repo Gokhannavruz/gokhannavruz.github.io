@@ -4,22 +4,165 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>WikiTok – Swipe &amp; Learn</title>
+<meta name="description" content="Turn scrolling into learning. Short Wikipedia articles with beautiful images, a feed that learns what you love, in 12 languages.">
+<meta property="og:title" content="WikiTok – Swipe & Learn">
+<meta property="og:description" content="Turn scrolling into learning.">
+<meta name="theme-color" content="#0E0F12">
 <style>
-  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
-       background:#0E0F12;color:#EDEDED;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;text-align:center}
-  main{max-width:520px;padding:32px}
-  h1{font-size:40px;margin:0 0 8px}
-  h1 span{opacity:.6}
-  p{color:#ffffff99;line-height:1.5}
-  a{color:#fff}
+  :root{--bg:#0E0F12;--surface:#17181C;--border:rgba(255,255,255,.1);--text:#EDEDED;--muted:rgba(255,255,255,.6)}
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+  a{color:inherit;text-decoration:none}
+  .glow{position:fixed;width:620px;height:620px;border-radius:50%;filter:blur(40px);opacity:.45;pointer-events:none;z-index:0}
+  .g1{top:-220px;left:-180px;background:radial-gradient(circle,#3D6BFF 0,transparent 65%)}
+  .g2{top:120px;right:-260px;background:radial-gradient(circle,#B0306A 0,transparent 65%)}
+  .wrap{position:relative;z-index:1;max-width:1080px;margin:0 auto;padding:0 24px}
+  nav{display:flex;align-items:center;justify-content:space-between;padding:28px 0}
+  .logo{font-weight:800;font-size:22px;letter-spacing:-.3px}
+  .logo span{opacity:.55}
+  .navlink{font-size:14px;color:var(--muted)}
+  .navlink:hover{color:#fff}
+
+  .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:48px;align-items:center;padding:48px 0 96px}
+  .badge{display:inline-block;padding:6px 12px;border-radius:20px;font-size:12px;font-weight:700;letter-spacing:1.2px;
+    background:linear-gradient(90deg,#8A4DFF,#FF3D7F)}
+  h1{font-size:clamp(40px,6vw,68px);line-height:1.02;letter-spacing:-2px;margin:20px 0 18px;font-weight:800}
+  .lead{font-size:19px;line-height:1.55;color:var(--muted);max-width:520px;margin:0 0 32px}
+  .cta{display:inline-flex;align-items:center;gap:10px;background:#fff;color:#000;font-weight:700;font-size:16px;
+    padding:16px 26px;border-radius:30px;transition:transform .15s}
+  .cta:hover{transform:translateY(-2px)}
+  .cta small{display:block;font-size:11px;font-weight:600;opacity:.6;line-height:1}
+  .meta{margin-top:18px;font-size:13px;color:var(--muted)}
+
+  /* Telefon maketi */
+  .phone{justify-self:center;width:300px;height:620px;border-radius:48px;padding:12px;background:#000;
+    border:1px solid var(--border);box-shadow:0 40px 120px rgba(0,0,0,.6),0 0 0 8px #15161a}
+  .screen{position:relative;width:100%;height:100%;border-radius:38px;overflow:hidden;
+    background:radial-gradient(120% 70% at 30% 20%,#2c5aa8 0,#162a52 40%,#0b1020 75%)}
+  .screen .stars{position:absolute;inset:0;background-image:
+    radial-gradient(2px 2px at 40px 90px,#fff8,transparent),radial-gradient(1.5px 1.5px at 200px 60px,#fff9,transparent),
+    radial-gradient(1px 1px at 120px 180px,#fff8,transparent),radial-gradient(2px 2px at 230px 220px,#fff6,transparent),
+    radial-gradient(1px 1px at 70px 260px,#fff7,transparent)}
+  .orb{position:absolute;top:150px;left:50%;width:150px;height:150px;margin-left:-75px;border-radius:50%;
+    background:radial-gradient(circle at 50% 50%,#000 0 38%,#ffb35c 44%,#ff6a3d 52%,transparent 66%);filter:blur(.5px)}
+  .shade{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.55) 0,transparent 22%,transparent 45%,rgba(0,0,0,.9) 100%)}
+  .top{position:absolute;top:18px;left:14px;right:14px}
+  .bar{display:flex;justify-content:space-between;align-items:center;font-weight:800;font-size:14px}
+  .dot{width:26px;height:26px;border-radius:50%;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.15)}
+  .chips{display:flex;gap:6px;margin-top:12px}
+  .chip{font-size:10px;padding:5px 9px;border-radius:12px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.15)}
+  .chip.on{background:#fff;color:#000;font-weight:700}
+  .card{position:absolute;left:16px;right:60px;bottom:28px}
+  .pill{display:inline-flex;align-items:center;gap:6px;font-size:9px;font-weight:700;letter-spacing:1px;padding:4px 8px;
+    border-radius:10px;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.15)}
+  .pill i{width:6px;height:6px;border-radius:50%;background:#5c6bc0}
+  .card h3{font-size:24px;margin:10px 0 6px;letter-spacing:-.5px}
+  .card p{font-size:11px;line-height:1.5;color:rgba(255,255,255,.8);margin:0 0 10px}
+  .hint{font-size:10px;font-weight:600;color:rgba(255,255,255,.6)}
+  .side{position:absolute;right:12px;bottom:34px;display:flex;flex-direction:column;gap:10px}
+  .side span{width:36px;height:36px;border-radius:50%;background:rgba(0,0,0,.3);border:1px solid rgba(255,255,255,.15);
+    display:flex;align-items:center;justify-content:center;font-size:15px}
+
+  section{padding:40px 0 80px}
+  h2{font-size:clamp(30px,4vw,44px);letter-spacing:-1px;margin:0 0 12px;text-align:center}
+  .sub{text-align:center;color:var(--muted);font-size:17px;margin:0 auto 44px;max-width:560px;line-height:1.5}
+  .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .feat{background:var(--surface);border:1px solid var(--border);border-radius:22px;padding:24px}
+  .ico{width:44px;height:44px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:16px}
+  .feat h4{margin:0 0 8px;font-size:17px}
+  .feat p{margin:0;color:var(--muted);font-size:14px;line-height:1.5}
+
+  .facts{display:flex;flex-direction:column;gap:10px;max-width:460px;margin:0 auto}
+  .bubble{align-self:flex-start;background:var(--surface);border:1px solid var(--border);border-radius:18px 18px 18px 4px;
+    padding:12px 16px;font-size:15px}
+  .bubble.me{align-self:flex-end;background:#fff;color:#000;font-weight:700;border-radius:18px 18px 4px 18px}
+
+  .final{text-align:center;background:linear-gradient(135deg,#2a1c5c,#5a1d3b);border:1px solid var(--border);
+    border-radius:32px;padding:56px 24px;margin-bottom:60px}
+  .final h2{margin-bottom:10px}
+  footer{border-top:1px solid var(--border);padding:28px 0 40px;display:flex;justify-content:space-between;
+    flex-wrap:wrap;gap:12px;color:var(--muted);font-size:13px}
+  footer a:hover{color:#fff}
+
+  @media (max-width:860px){
+    .hero{grid-template-columns:1fr;text-align:center;padding-top:16px}
+    .lead{margin-left:auto;margin-right:auto}
+    .grid{grid-template-columns:1fr 1fr}
+  }
+  @media (max-width:520px){ .grid{grid-template-columns:1fr} .phone{transform:scale(.92)} }
 </style>
 </head>
 <body>
-<main>
-  <h1>Wiki<span>Tok</span></h1>
-  <p>Swipe through the world's knowledge. Short Wikipedia articles with beautiful images, in 12 languages.</p>
-  <p><a href="https://apps.apple.com/us/app/wikitok-swipe-learn/id6742821727">Download on the App Store</a> ·
-     <a href="https://toolstoore.blogspot.com/2025/03/wikitok-privacy-policy.html">Privacy Policy</a></p>
-</main>
+<div class="glow g1"></div><div class="glow g2"></div>
+<div class="wrap">
+  <nav>
+    <div class="logo">Wiki<span>Tok</span></div>
+    <a class="navlink" href="https://toolstoore.blogspot.com/2025/03/wikitok-privacy-policy.html">Privacy</a>
+  </nav>
+
+  <div class="hero">
+    <div>
+      <span class="badge">SWIPE &amp; LEARN</span>
+      <h1>Turn scrolling into learning.</h1>
+      <p class="lead">Short Wikipedia articles with beautiful images. A feed that learns what you love — science, history, art, music and more, in 12 languages.</p>
+      <a class="cta" href="https://apps.apple.com/us/app/wikitok-swipe-learn/id6742821727">
+        <span><small>Download on the</small>App Store</span>
+      </a>
+      <div class="meta">Free · iPhone &amp; iPad</div>
+    </div>
+
+    <div class="phone" aria-hidden="true">
+      <div class="screen">
+        <div class="stars"></div><div class="orb"></div><div class="shade"></div>
+        <div class="top">
+          <div class="bar"><span class="dot"></span><span>Wiki<span style="opacity:.55">Tok</span></span><span class="dot"></span></div>
+          <div class="chips"><span class="chip on">All</span><span class="chip">Science</span><span class="chip">History</span><span class="chip">Art</span></div>
+        </div>
+        <div class="card">
+          <span class="pill"><i></i>ASTRONOMY</span>
+          <h3>Black hole</h3>
+          <p>A region of spacetime where gravity is so strong that nothing, not even light, can escape it…</p>
+          <span class="hint">Tap to read ›</span>
+        </div>
+        <div class="side"><span>♡</span><span>↗</span><span>◎</span></div>
+      </div>
+    </div>
+  </div>
+
+  <section>
+    <h2>Five minutes a day. Endless curiosity.</h2>
+    <p class="sub">Same habit, better result: every swipe teaches you something real.</p>
+    <div class="grid">
+      <div class="feat"><div class="ico" style="background:#3D6BFF29">⚡️</div><h4>Learn while you scroll</h4><p>Bite-sized articles, one swipe at a time. Swipe left to read the whole story.</p></div>
+      <div class="feat"><div class="ico" style="background:#16C79A29">✨</div><h4>A feed that learns you</h4><p>The more you read, the better your feed fits what you love.</p></div>
+      <div class="feat"><div class="ico" style="background:#FFB54729">🧠</div><h4>Daily quiz</h4><p>Test yourself on what you read today and remember it longer.</p></div>
+      <div class="feat"><div class="ico" style="background:#FF4D6729">🌍</div><h4>12 languages</h4><p>English, Türkçe, Deutsch, Español, Français, 日本語 and more.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Always have something interesting to say.</h2>
+    <p class="sub">Surprising facts from history, science and art.</p>
+    <div class="facts">
+      <div class="bubble">Octopuses have three hearts 🐙</div>
+      <div class="bubble">A day on Venus is longer than its year 🪐</div>
+      <div class="bubble">Honey found in Egyptian tombs was still edible 🍯</div>
+      <div class="bubble me">Wait, really?! 🤯</div>
+    </div>
+  </section>
+
+  <div class="final">
+    <h2>Start swiping smarter.</h2>
+    <p class="sub" style="margin-bottom:28px">Free to download. Content from Wikipedia, the free encyclopedia.</p>
+    <a class="cta" href="https://apps.apple.com/us/app/wikitok-swipe-learn/id6742821727"><span><small>Download on the</small>App Store</span></a>
+  </div>
+
+  <footer>
+    <span>© 2026 WikiTok · Articles from Wikipedia under CC BY-SA</span>
+    <span><a href="https://toolstoore.blogspot.com/2025/03/wikitok-privacy-policy.html">Privacy Policy</a> ·
+      <a href="https://apps.apple.com/us/app/wikitok-swipe-learn/id6742821727">App Store</a></span>
+  </footer>
+</div>
 </body>
 </html>
