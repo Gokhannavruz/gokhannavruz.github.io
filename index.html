@@ -27,22 +27,22 @@
   .top-link:hover{color:var(--ink)}
 
   /* Hero */
-  .hero{display:grid;grid-template-columns:1fr 360px;gap:72px;align-items:center;padding:72px 0 96px}
-  .kicker{font-size:13px;color:var(--muted);letter-spacing:.02em;margin:0 0 28px}
-  h1{font-family:var(--serif);font-weight:400;font-size:clamp(52px,7.4vw,96px);line-height:.95;letter-spacing:-.02em;margin:0 0 28px}
+  .hero{display:grid;grid-template-columns:1fr auto;gap:clamp(40px,6vw,72px);align-items:center;padding:clamp(28px,6vh,72px) 0 clamp(48px,9vh,96px);min-height:calc(100svh - 90px)}
+  .kicker{font-size:13px;color:var(--muted);letter-spacing:.02em;margin:0 0 clamp(14px,3vh,28px)}
+  h1{font-family:var(--serif);font-weight:400;font-size:clamp(44px,min(7.4vw,10.5vh),96px);line-height:.95;letter-spacing:-.02em;margin:0 0 clamp(16px,3vh,28px)}
   h1 em{color:var(--muted)}
-  .lead{font-size:18px;line-height:1.6;color:#C9C6BF;max-width:470px;margin:0 0 36px}
+  .lead{font-size:clamp(16px,2.1vh,18px);line-height:1.6;color:#C9C6BF;max-width:470px;margin:0 0 clamp(20px,4vh,36px)}
   .btn{display:inline-block;background:var(--ink);color:#0B0B0C;text-decoration:none;font-weight:600;font-size:15px;
        padding:15px 22px;border-radius:4px}
   .btn:hover{background:#fff}
   .fine{margin-top:18px;font-size:13px;color:var(--muted)}
 
   /* Phone */
-  .device{justify-self:end}
+  .device{justify-self:end;display:flex;flex-direction:column}
   .phone{position:relative;width:320px;height:660px;border-radius:52px;background:#000;padding:11px;
          box-shadow:0 0 0 1px #2a2a2c,0 30px 80px rgba(0,0,0,.55)}
   .screen{position:relative;width:100%;height:100%;border-radius:42px;overflow:hidden;background:#111}
-  .track{position:absolute;inset:0;transition:transform .75s cubic-bezier(.2,.8,.2,1)}
+  .track{position:absolute;inset:0;transition:transform .55s cubic-bezier(.4,0,.2,1);will-change:transform}
   .slide{position:relative;width:100%;height:100%;overflow:hidden}
   .slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
   .slide::after{content:"";position:absolute;inset:0;
@@ -56,6 +56,7 @@
           display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden}
   .copy span{font-size:10.5px;font-weight:600;color:rgba(255,255,255,.6)}
   .chrome{position:absolute;inset:0;z-index:3;pointer-events:none}
+  .chrome::before{content:"";position:absolute;left:0;right:0;top:0;height:96px;background:linear-gradient(to bottom,rgba(0,0,0,.55),transparent)}
   .bar{position:absolute;top:16px;left:14px;right:14px;display:flex;justify-content:space-between;align-items:center;
        font-weight:700;font-size:14px}
   .bar i{font-style:normal;opacity:.55}
@@ -73,7 +74,7 @@
   .touch.go{animation:swipe .7s cubic-bezier(.3,.7,.3,1)}
   @keyframes swipe{0%{opacity:0;transform:translateY(0) scale(.85)}20%{opacity:1}100%{opacity:0;transform:translateY(-170px) scale(1)}}
 
-  .caption{display:flex;justify-content:space-between;margin-top:18px;font-size:13px;color:var(--muted);width:320px}
+  .caption{display:flex;justify-content:space-between;margin-top:16px;font-size:13px;color:var(--muted);width:320px}
   .caption b{color:var(--ink);font-weight:500}
 
   /* Sections */
@@ -108,11 +109,11 @@
   footer a:hover{color:var(--ink)}
 
   @media (max-width:900px){
-    .hero{grid-template-columns:1fr;gap:56px;padding-top:48px}
+    .hero{grid-template-columns:1fr;gap:48px;padding-top:40px;min-height:0}
     .device{justify-self:center}
     .steps{grid-template-columns:1fr;gap:36px}
   }
-  @media (max-width:420px){ .phone{width:290px;height:600px} .caption{width:290px} }
+  @media (max-width:420px){ .wrap{padding:0 20px} }
   @media (prefers-reduced-motion:reduce){ .track{transition:none} .touch{display:none} }
 </style>
 </head>
@@ -249,6 +250,19 @@
   phone.addEventListener('mouseenter', () => paused = true);
   phone.addEventListener('mouseleave', () => paused = false);
   setInterval(next, 3400);
+
+  // Telefonu pencereye sığdır: içeriği orantılı küçültür (yazılar ve
+  // butonlar telefonla birlikte ölçeklenir, taşma olmaz)
+  const device = document.querySelector('.device');
+  function fit(){
+    const narrow = innerWidth <= 900;
+    const byHeight = narrow ? innerHeight * 0.78 / 700 : (innerHeight - 170) / 700;
+    const byWidth = (innerWidth - 48) / 320;
+    const z = Math.max(0.6, Math.min(1, byHeight, byWidth));
+    device.style.zoom = z;
+  }
+  addEventListener('resize', fit);
+  fit();
 </script>
 </body>
 </html>
